@@ -1,0 +1,74 @@
+#tabela global
+select a.animal_id,
+a.data_nascimento,
+a.raca,
+a.categoria,
+a.sexo,
+spe.data_ocorrencia  as data_ocorrencia_prod,
+spe.produtividade,
+spe.motivacao,
+sre.data_ocorrencia as data_ocorrencia_repro,
+sre.reprodutividade 
+from  usuario u
+LEFT JOIN rebanho r on u.usuario_id = r.usuario_id
+LEFT join animal a on a.rebanho_id = r.rebanho_id
+left join situacao_produtiva_event spe on spe.vaca_id = a.animal_id
+left join situacao_reprodutiva_event sre on sre.vaca_id = a.animal_id 
+WHERE u.username = "f{nome}"
+
+
+
+#tabela animal
+select DISTINCT bin_to_uuid(a.animal_id),
+a.nome,
+a.data_nascimento,
+a.raca,
+a.categoria,
+a.sexo
+from  usuario u
+LEFT JOIN rebanho r on u.usuario_id = r.usuario_id
+LEFT join animal a on a.rebanho_id = r.rebanho_id
+WHERE u.username = "f{nome}"
+
+#tabela evento de produção
+select bin_to_uuid(a.animal_id),
+a.nome,
+a.raca,
+a.categoria,
+spe.data_ocorrencia as data_ocorrencia_prod,
+spe.produtividade,
+spe.motivacao
+from  usuario u
+LEFT JOIN rebanho r on u.usuario_id = r.usuario_id
+LEFT join animal a on a.rebanho_id = r.rebanho_id
+left join situacao_produtiva_event spe on spe.vaca_id = a.animal_id
+WHERE u.username = "f{nome}" and a.categoria ="V" 
+
+#tabela situação de produção
+select bin_to_uuid(a.animal_id),
+a.nome,
+a.raca,
+a.categoria,
+spe.data_ocorrencia as data_ocorrencia_prod,
+spe.produtividade,
+spe.motivacao
+from  usuario u
+LEFT JOIN rebanho r on u.usuario_id = r.usuario_id
+LEFT join animal a on a.rebanho_id = r.rebanho_id
+left join situacao_produtiva_event spe on spe.vaca_id = a.animal_id
+WHERE u.username = "f{nome}" and a.categoria ="V" 
+
+# tabela evendo de reprodução
+select bin_to_uuid(a.animal_id),
+a.nome,
+a.data_nascimento,
+a.raca,
+a.categoria,
+a.sexo,
+sre.data_ocorrencia as data_ocorrencia_repro,
+sre.reprodutividade 
+from  usuario u
+LEFT JOIN rebanho r on u.usuario_id = r.usuario_id
+LEFT join animal a on a.rebanho_id = r.rebanho_id
+left join situacao_reprodutiva_event sre on sre.vaca_id = a.animal_id 
+WHERE u.username = "f{nome}" and a.sexo != "M"
